@@ -1,231 +1,68 @@
-# 🚚 Supply Chain Lakehouse + ML + AI Dashboard
-
-End-to-end **Data Engineering + Analytics + Machine Learning + AI-ready application** built with:
-
-- **DuckDB** as analytical warehouse
-- **dbt** for data transformation & modeling
-- **Streamlit** for interactive dashboard
-- **Scikit-Learn** for ML prediction
-- **Generative AI (Gemini / GPT ready)** for LLM insight layer
-
-This project demonstrates a **modern lakehouse architecture** on a local machine using only **free & open-source tools**.
-
----
-
-## 🧱 Architecture Overview
-
-Raw CSV (Kaggle)
-|
-v
-Python Ingestion Script
-|
-v
-DuckDB (Raw Layer)
-|
-v
-dbt (Staging → Dimensions → Facts → Mart)
-|
-v
-DuckDB (Analytics Layer)
-|
-v
-Streamlit Dashboard
-|
-+--> ML Model (Delay Prediction)
-|
-+--> LLM Insight Layer (Gemini / GPT)
-
-yaml
-Copy code
-
----
-
-## 📁 Project Structure
-
-supply-chain-lakehouse/
+🚚 Supply Chain Intelligence LakehouseA full-stack "Modern Data Stack in a Box" demonstrating an end-to-end pipeline from raw CSV ingestion to Machine Learning predictions and GenAI insights, running entirely locally.📖 Executive SummaryThis project establishes a local Data Lakehouse to analyze supply chain performance. It moves beyond simple analysis by implementing engineering best practices: ELT pipelines, dimensional modeling, predictive analytics, and an AI-powered interface.Key Capabilities:Data Engineering: Ingests raw logistics data into a DuckDB warehouse using Python.Analytics Engineering: Uses dbt (data build tool) to transform raw data into a Star Schema (Facts & Dimensions).Machine Learning: Predicts shipping delays using a Random Forest model trained on historical logistics data.GenAI Integration: A foundation for LLM-driven insights (Gemini/GPT) allows users to "chat" with their supply chain data.🧱 ArchitectureThis project follows the Medallion Architecture (Bronze $\to$ Silver $\to$ Gold) adapted for a lightweight local stack.Code snippetgraph LR
+ graph LR
+    A[Raw CSV Data] -->|Python Ingestion| B[(DuckDB: Raw Layer)]
+    B -->|dbt: Staging| C(Staging Views)
+    C -->|dbt: Modeling| D[Dimensions & Facts]
+    D -->|dbt: Aggregation| E[Data Marts]
+    E -->|Read| F[Streamlit Dashboard]
+    F -->|Interacts| G[ML Model: Delay Prediction]
+    F -->|Interacts| H[LLM Insight Layer]
+    
+🛠 Tech StackComponentToolWhy this tool?Storage & ComputeDuckDBLightning-fast, serverless OLAP database optimized for analytics.Transformationdbt CoreIndustry standard for modular SQL, testing, and lineage.OrchestrationPythonCustom scripts for ingestion and ML pipeline management.VisualizationStreamlitRapid frontend development for data apps.Machine LearningScikit-LearnRobust library for training the delay prediction classifier.AI LayerGemini / GPTLarge Language Model integration for unstructured data querying.📂 Project StructureBashsupply-chain-lakehouse/
 │
-├─ data/
-│ └─ raw_supply_chain.csv
+├── 📁 data/                  # Source data storage
+│   └── raw_supply_chain.csv
 │
-├─ warehouse/
-│ └─ supply_chain.duckdb
+├── 📁 warehouse/             # The embedded analytical database
+│   └── supply_chain.duckdb
 │
-├─ scripts/
-│ ├─ ingest_csv_to_duckdb.py
-│ ├─ inspect_duckdb.py
-│ └─ train_model.py
+├── 📁 dbt/                   # dbt project root
+│   └── supply_chain/
+│       ├── models/
+│       │   ├── staging/      # Cleaned raw data (1:1 with source)
+│       │   ├── dimensions/   # Context (Product, Location)
+│       │   ├── facts/        # Measurements (Sales, Shipping)
+│       │   └── marts/        # Aggregated KPIs for the dashboard
+│       └── dbt_project.yml
 │
-├─ dbt/
-│ └─ supply_chain/
-│ ├─ models/
-│ │ ├─ staging/
-│ │ ├─ dimensions/
-│ │ ├─ facts/
-│ │ └─ marts/
-│ └─ dbt_project.yml
+├── 📁 scripts/               # ETL & Utility scripts
+│   ├── ingest_csv_to_duckdb.py
+│   └── inspect_duckdb.py
 │
-├─ supply_chain_app/
-│ ├─ app.py
-│ ├─ utils/
-│ │ ├─ ml.py
-│ │ └─ charts.py
-│ ├─ models/
-│ │ └─ delay_predictor.pkl
-│ └─ requirements.txt
+├── 📁 supply_chain_app/      # Streamlit Application
+│   ├── app.py                # Main entry point
+│   ├── models/               # Serialized ML models (.pkl)
+│   ├── utils/                # Helper functions for UI/ML/AI
+│   └── scripts/              # ML Training scripts
 │
-└─ README.md
-
-yaml
-Copy code
-
----
-
-## 🧪 Dataset
-
-Source: **Kaggle – Supply Chain Dataset (Cosmetics & Logistics)**  
-Total records: **100 rows**
-
-Main raw columns:
-- Product category, SKU, price
-- Sales volume & revenue
-- Supplier & city
-- Shipping cost & time
-- Manufacturing cost & defect rate
-
----
-
-## ⚙️ Tech Stack
-
-| Layer | Tool |
-|------|------|
-| Storage | DuckDB |
-| Transformation | dbt |
-| Orchestration | Python Scripts |
-| Visualization | Streamlit + Plotly |
-| Machine Learning | Scikit-Learn |
-| AI | Gemini / GPT ready |
-| Language | Python |
-
----
-
-## 🚀 How to Run From Scratch
-
-### 1️⃣ Clone This Repo
-
-```bash
-git clone https://github.com/yourusername/supply-chain-lakehouse.git
+└── requirements.txt          # Python dependencies
+🧪 The Data Model (Deep Dive)We utilize dbt to transform raw chaotic data into a clean Star Schema.Staging Layer (stg_supply_chain):Renames columns to snake_case.Casts data types (Strings to Float/Int).Handles null values.Dimension Tables:dim_product: Contains SKU, category, price, and supplier metadata.dim_location: Contains shipping routes and routes.Fact Table:fact_sales: Contains transactional data, revenue, shipping costs, and defect rates.Mart Layer (mart_supply_chain_performance):Pre-aggregated table joining Facts and Dimensions.Calculates key metrics like Total Revenue, Avg Shipping Time, and Defect Ratios.🤖 Machine Learning: Delay PredictionThe application includes a supervised learning model to identify potential supply chain risks.Problem: Binary Classification (Will the shipment be delayed?)Target: delay_flag (Derived from shipping days vs. lead time).Features Used:supplier_lead_time_daysdefect_rateshipping_costproduct_categoryAlgorithm: Random Forest Classifier (Scikit-Learn).Output: The model is pickled (delay_predictor.pkl) and loaded into Streamlit for real-time inference on new data.🚀 Installation & SetupFollow these steps to build the lakehouse from scratch on your local machine.1️⃣ PrerequisitesPython 3.9+Git2️⃣ Clone & Configure EnvironmentBashgit clone https://github.com/yourusername/supply-chain-lakehouse.git
 cd supply-chain-lakehouse
-2️⃣ Create Virtual Environment
-bash
-Copy code
+
+# Create a virtual environment
 python -m venv .venv
-. .venv\Scripts\activate
-pip install -r supply_chain_app/requirements.txt
-3️⃣ Ingest Raw CSV → DuckDB
-bash
-Copy code
-python scripts/ingest_csv_to_duckdb.py
-This creates:
 
-bash
-Copy code
-warehouse/supply_chain.duckdb
-With table:
+# Activate environment
+# Windows:
+.venv\Scripts\activate
+# Mac/Linux:
+source .venv/bin/activate
 
-raw_supply_chain
+# Install dependencies
+pip install -r requirements.txt
+3️⃣ Ingest Raw Data (Extract & Load)Run the python script to read the CSV and create the DuckDB database.Bashpython scripts/ingest_csv_to_duckdb.py
+Result: A supply_chain.duckdb file is created in the warehouse/ folder.4️⃣ Run dbt Models (Transform)Transform the raw data into analytics-ready tables.Bashcd dbt/supply_chain
 
-4️⃣ Run dbt Transformation
-bash
-Copy code
-cd dbt/supply_chain
+# Check connection
 dbt debug
+
+# Run transformations
 dbt run
-This will generate:
 
-stg_supply_chain
-
-dim_product
-
-fact_sales
-
-mart_supply_chain_performance
-
-📊 Analytics Layer (DuckDB)
-Generated tables:
-
-Table	Description
-raw_supply_chain	Raw ingested data
-stg_supply_chain	Cleaned standardized data
-dim_product	Product dimension
-fact_sales	Sales fact table
-mart_supply_chain_performance	Aggregated KPIs
-
-🤖 Machine Learning – Delay Prediction
-Training
-bash
-Copy code
+# (Optional) Generate documentation
+dbt docs generate && dbt docs serve
+5️⃣ Train the ML ModelTrain the Random Forest classifier on the transformed data.Bash# Return to project root first if needed
+cd ../../
 python supply_chain_app/scripts/train_model.py
-Features:
-
-supplier_lead_time_days
-
-defect_rate
-
-shipping_cost
-
-Target:
-
-delay_flag (auto-generated from shipping_time_days)
-
-Model:
-
-RandomForestClassifier
-
-Saved output:
-
-bash
-Copy code
-supply_chain_app/models/delay_predictor.pkl
-📈 Streamlit Dashboard
-Run App
-bash
-Copy code
-cd supply_chain_app
+6️⃣ Launch the Dashboard 📊Start the Streamlit app to visualize the data and test the ML model.Bashcd supply_chain_app
 streamlit run app.py
-Dashboard includes:
-
-✅ Sales KPIs
-✅ Product performance
-✅ Defect & manufacturing analysis
-✅ ML Delay Prediction (real-time)
-✅ Interactive filtering
-✅ AI-ready chat analytics (Gemini / GPT)
-
-🧠 AI Layer (LLM Ready)
-The app architecture supports:
-
-Invoice / logistics document extraction
-
-Natural language query on structured data
-
-AI-generated insights over KPIs
-
-Gemini / GPT API can be plugged easily via:
-
-swift
-Copy code
-utils/ai.py (optional extension)
-📌 What This Project Demonstrates
-✅ End-to-end Data Engineering Pipeline
-
-✅ Modern Lakehouse architecture
-
-✅ dbt modeling (staging → dim → fact → mart)
-
-✅ DuckDB as embedded analytical warehouse
-
-✅ Production-ready ML pipeline
-
-✅ Business-oriented dashboard
-
-✅ AI-first analytics foundation
