@@ -1,0 +1,20 @@
+﻿if tab == 'Dashboard':
+    st.header('📊 Supply Chain Performance Dashboard')
+
+    # prefer mart (most BI-ready), fall back to fact_sales
+    try:
+        df = load_table('mart_supply_chain_performance')
+    except Exception:
+        df = load_table('fact_sales')
+
+    # Show columns for debug
+    st.caption(f'Columns: {', '.join(df.columns.tolist())}')
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.plotly_chart(supplier_defect_chart(df), use_container_width=True)
+
+    with col2:
+        st.plotly_chart(lead_time_chart(df), use_container_width=True)
+
+    st.plotly_chart(shipping_cost_chart(df), use_container_width=True)

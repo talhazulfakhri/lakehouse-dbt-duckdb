@@ -1,0 +1,9 @@
+pandas
+duckdb
+dbt-core==1.6.1
+dbt-duckdb==1.6.1
+apache-airflow==2.7.1
+python-dotenv
+requests
+duckdb-engine
+sqlalchemy

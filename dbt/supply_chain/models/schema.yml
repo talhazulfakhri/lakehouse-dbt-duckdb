@@ -1,0 +1,20 @@
+﻿version: 2
+
+sources:
+  - name: raw
+    schema: main
+    tables:
+      - name: raw_supply_chain
+
+models:
+  - name: stg_supply_chain
+    description: "Staging model for supply chain data"
+    columns:
+      - name: product_id
+        tests:
+          - not_null
+
+  - name: dim_product
+  - name: dim_supplier
+  - name: fact_sales
+  - name: mart_supply_chain_performance

@@ -1,0 +1,8 @@
+supply_chain:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "T:/supply-chain-lakehouse/warehouse/supply_chain.duckdb"
+      threads: 1
+      extensions: []

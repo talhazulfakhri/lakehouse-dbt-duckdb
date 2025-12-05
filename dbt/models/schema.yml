@@ -1,0 +1,26 @@
+version: 2
+
+sources:
+  - name: raw
+    tables:
+      - name: raw_supply_chain
+        description: "Raw staged table created from scripts/bronze_to_duckdb.py"
+
+models:
+  - name: stg_supply_chain
+    description: "Staging model for supply chain data"
+    columns:
+      - name: product_id
+        tests:
+          - not_null
+  - name: dim_product
+    description: "Products dimension"
+  - name: dim_supplier
+    description: "Suppliers dimension"
+  - name: fact_sales
+    description: "Sales fact table"
+  - name: mart_supply_chain_performance
+    description: "Aggregated mart for reporting"
+
+
+

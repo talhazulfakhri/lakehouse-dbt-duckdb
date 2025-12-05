@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Data & Database (PENTING: Jangan upload DB binary)
+warehouse/*.duckdb
+warehouse/*.duckdb.wal
+# Jika data raw CSV kamu sangat besar (>100MB), uncomment baris di bawah:
+# data/*.csv 
+
+# dbt
+dbt/supply_chain/dbt_packages/
+dbt/supply_chain/target/
+dbt/supply_chain/logs/
+
+# IDE settings
+.vscode/
+.idea/

@@ -1,0 +1,30 @@
+[0m14:20:09.707315 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001EF259367A0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001EF277D87C0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001EF277D8A60>]}
+
+
+============================== 14:20:09.721215 | 51e96cb8-54b2-4a4d-ac6a-e3ba16cc506c ==============================
+[0m14:20:09.721215 [info ] [MainThread]: Running with dbt=1.6.1
+[0m14:20:09.721215 [debug] [MainThread]: running dbt with arguments {'cache_selected_only': 'False', 'target_path': 'None', 'profiles_dir': 'C:\\Users\\Talha\\.dbt', 'invocation_command': 'dbt init supply_chain', 'log_format': 'default', 'warn_error': 'None', 'log_path': 'logs', 'fail_fast': 'False', 'indirect_selection': 'eager', 'send_anonymous_usage_stats': 'True', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'partial_parse': 'True', 'version_check': 'True', 'use_experimental_parser': 'False', 'quiet': 'False', 'introspect': 'True', 'log_cache_events': 'False', 'debug': 'False', 'no_print': 'None', 'use_colors': 'True', 'printer_width': '80', 'write_json': 'True'}
+[0m14:20:09.721215 [warn ] [MainThread]: [ConfigFolderDirectory]: Unable to parse dict {'dir': WindowsPath('C:/Users/Talha/.dbt')}
+[0m14:20:09.721215 [info ] [MainThread]: Creating dbt configuration folder at 
+[0m14:20:09.728420 [debug] [MainThread]: Starter project path: T:\supply-chain-lakehouse\.venv\lib\site-packages\dbt\include\starter_project
+[0m14:20:09.804689 [info ] [MainThread]: 
+Your new dbt project "supply_chain" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m14:20:09.804689 [info ] [MainThread]: Setting up your profile.
+[0m14:20:16.764784 [info ] [MainThread]: Profile supply_chain written to C:\Users\Talha\.dbt\profiles.yml using target's sample configuration. Once updated, you'll be able to start developing with dbt.
+[0m14:20:16.764784 [debug] [MainThread]: Command `dbt init` succeeded at 14:20:16.764784 after 7.07 seconds
+[0m14:20:16.764784 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001EF259367A0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001EF277D8A60>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001EF277D8FD0>]}
+[0m14:20:16.764784 [debug] [MainThread]: Flushing usage events
