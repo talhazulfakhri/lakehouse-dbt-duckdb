@@ -26,30 +26,56 @@ graph LR
     F -->|Predictions| E
     G[Gemini/GPT API] -.->|Insights| E
 
-# Create a virtual environment
-python -m venv .venv
 
-# Activate environment
-# Windows:
+## 📂 Project StructurePlaintextsupply-chain-lakehouse/
+│
+├── data/                       # Raw input data
+│   └── raw_supply_chain.csv
+│
+├── warehouse/                  # OLAP Database file
+│   └── supply_chain.duckdb
+│
+├── scripts/                    # ETL & Training Scripts
+│   ├── ingest_csv_to_duckdb.py
+│   ├── inspect_duckdb.py
+│   └── train_model.py
+│
+├── dbt/                        # dbt Transformation Project
+│   └── supply_chain/
+│       ├── models/
+│       │   ├── staging/        # Cleaned data
+│       │   ├── dimensions/     # Dimension tables (Product, etc)
+│       │   ├── facts/          # Fact tables (Sales)
+│       │   └── marts/          # Aggregated tables for BI
+│       └── dbt_project.yml
+│
+├── supply_chain_app/           # Dashboard Application
+│   ├── app.py
+│   ├── utils/
+│   │   ├── ml.py
+│   │   └── charts.py
+│   ├── models/                 # Serialized ML Models
+│   │   └── delay_predictor.pkl
+│   └── requirements.txt
+│
+└── README.md
+🧪 DatasetThe project uses the Supply Chain Dataset (Cosmetics & Logistics) sourced from Kaggle.Records: ~100 rows (Simulated data)Key Features: Product SKU, Price, Lead times, Shipping costs, Defect rates, Routes, and Carrier details.🚀 Getting StartedFollow these steps to run the project from scratch.1️⃣ Clone the RepositoryBashgit clone [https://github.com/talhazulfakhri/lakehouse-dbt-duckdb.git](https://github.com/talhazulfakhri/lakehouse-dbt-duckdb.git)
+cd supply-chain-lakehouse
+2️⃣ Environment SetupCreate a virtual environment to keep dependencies clean.Bashpython -m venv .venv
+# Activate: Windows
 .venv\Scripts\activate
-# Mac/Linux:
+# Activate: Mac/Linux
 source .venv/bin/activate
 
 # Install dependencies
-pip install -r requirements.txt
-3️⃣ Ingest Raw Data (Extract & Load)Run the python script to read the CSV and create the DuckDB database.Bashpython scripts/ingest_csv_to_duckdb.py
-Result: A supply_chain.duckdb file is created in the warehouse/ folder.4️⃣ Run dbt Models (Transform)Transform the raw data into analytics-ready tables.Bashcd dbt/supply_chain
-
-# Check connection
-dbt debug
-
-# Run transformations
+pip install -r supply_chain_app/requirements.txt
+3️⃣ Ingest Data (ETL)Load the raw CSV into the DuckDB raw layer.Bashpython scripts/ingest_csv_to_duckdb.py
+Output: Creates warehouse/supply_chain.duckdb populated with raw_supply_chain.4️⃣ Run dbt TransformationsClean, model, and aggregate the data.Bashcd dbt/supply_chain
+dbt deps
 dbt run
-
-# (Optional) Generate documentation
-dbt docs generate && dbt docs serve
-5️⃣ Train the ML ModelTrain the Random Forest classifier on the transformed data.Bash# Return to project root first if needed
+Output: Generates stg_supply_chain, dim_product, fact_sales, and mart_supply_chain_performance.5️⃣ Train Machine Learning ModelTrain a Random Forest Classifier to predict shipping delays.Bash# Go back to root if inside dbt folder
 cd ../../
-python supply_chain_app/scripts/train_model.py
-6️⃣ Launch the Dashboard 📊Start the Streamlit app to visualize the data and test the ML model.Bashcd supply_chain_app
+python scripts/train_model.py
+Features: supplier_lead_time, defect_rate, shipping_costTarget: delay_flag (Derived from shipping days)Output: Saves model to supply_chain_app/models/delay_predictor.pkl6️⃣ Launch the DashboardStart the Streamlit app to visualize the data.Bashcd supply_chain_app
 streamlit run app.py
+📊 Analytics & InsightsThe Dashboard provides three main layers of value:Business Intelligence (BI):Sales KPIs & Revenue analysis.Defect rate vs. Manufacturing cost correlation.Top performing products and routes.Predictive Analytics (ML):Real-time prediction of shipment delays based on lead time and carrier performance.Generative AI (Ready):Architecture supports plugging in OpenAI/Gemini API to query the DuckDB warehouse using Natural Language.
